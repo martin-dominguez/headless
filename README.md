@@ -16,5 +16,5 @@ Ensure that you user has permissions to execute the script using bash.
 
 Usage:
 ```
-  notification-daemon-4-linux.sh start
+  notification-daemon-4-linux.sh { start | stop | restart | status }
 ```
