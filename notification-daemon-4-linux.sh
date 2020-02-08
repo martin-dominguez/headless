@@ -23,7 +23,7 @@
 # 	 										#
 #############################################
 
-daemonName="DXP-NOTIFY"
+daemonName="dxp-notification-daemon"
 
 pidDir="."
 pidFile="$pidDir/$daemonName.pid"
@@ -130,6 +130,8 @@ setupDaemon() {
 startDaemon() {
   # Start the daemon.
   setupDaemon # Make sure the directories are there.
+  lastcheck=$(timestamp) # Set current date as starting date
+  
   if [[ `checkDaemon` = 1 ]]; then
     echo " * \033[31;5;148mError\033[39m: $daemonName is already running."
     exit 1
