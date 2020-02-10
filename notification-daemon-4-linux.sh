@@ -119,7 +119,7 @@ setupDaemon() {
     touch "$logFile"
   else
     # Check to see if we need to rotate the logs.
-    size=$((`ls -l "$logFile" | cut -d " " -f 8`/1024))
+    size=$((`ls -l "$logFile" | cut -d " " -f 5`/1024))
     if [[ $size -gt $logMaxSize ]]; then
       mv $logFile "$logFile.old"
       touch "$logFile"
@@ -131,9 +131,10 @@ startDaemon() {
   # Start the daemon.
   setupDaemon # Make sure the directories are there.
   lastcheck=$(timestamp) # Set current date as starting date
-  
-  if [[ `checkDaemon` = 1 ]]; then
-    echo " * \033[31;5;148mError\033[39m: $daemonName is already running."
+    
+  checkDaemon > /dev/null 2>&1
+  if [[ "$?" -eq 1 ]]; then
+    echo -e " * \e[31mError\033[39m: $daemonName is already running."
     exit 1
   fi
   echo " * Starting $daemonName with PID: $myPid."
@@ -145,9 +146,10 @@ startDaemon() {
 }
 
 stopDaemon() {
-  # Stop the daemon.
-  if [[ `checkDaemon` -eq 0 ]]; then
-    echo " * \033[31;5;148mError\033[39m: $daemonName is not running."
+  # Stop the daemon.  
+  checkDaemon > /dev/null 2>&1
+  if [[ "$?" -eq 0 ]]; then
+    echo -e " * \033[31;5;148mError\033[39m: $daemonName is not running."
     exit 1
   fi
   echo " * Stopping $daemonName"
@@ -160,7 +162,8 @@ stopDaemon() {
 
 statusDaemon() {
   # Query and return whether the daemon is running.
-  if [[ `checkDaemon` -eq 1 ]]; then
+  checkDaemon > /dev/null 2>&1
+  if [[ "$?" -eq 1 ]]; then
     echo " * $daemonName is running."
   else
     echo " * $daemonName isn't running."
@@ -170,7 +173,8 @@ statusDaemon() {
 
 restartDaemon() {
   # Restart the daemon.
-  if [[ `checkDaemon` = 0 ]]; then
+  checkDaemon > /dev/null 2>&1
+  if [[  "$?" = 0 ]]; then
     # Can't restart it if it isn't running.
     echo "$daemonName isn't running."
     exit 1
@@ -181,15 +185,12 @@ restartDaemon() {
 
 checkDaemon() {
   # Check to see if the daemon is running.
-  # This is a different function than statusDaemon
-  # so that we can use it other functions.
   if [ -z "$oldPid" ]; then
     return 0
   elif [[ `ps aux | grep "$oldPid" | grep -v grep` > /dev/null ]]; then
     if [ -f "$pidFile" ]; then
-      if [[ `cat "$pidFile"` = "$oldPid" ]]; then
+      if [[ `cat "$pidFile"` == "$oldPid" ]]; then
         # Daemon is running.
-        # echo 1
         return 1
       else
         # Daemon isn't running.
@@ -260,7 +261,7 @@ case "$1" in
     restartDaemon
     ;;
   *)
-  echo "\033[31;5;148mError\033[39m: usage $0 { start | stop | restart | status }"
+  echo -e "\033[31;5;148mError\033[39m: usage $0 { start | stop | restart | status }"
   exit 1
 esac
 
