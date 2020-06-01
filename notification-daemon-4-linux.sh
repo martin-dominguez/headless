@@ -5,22 +5,22 @@
 #   / /    / // /_  / __/ / /_/ / /| |\  /  #
 #  / /____/ // __/ / /___/ _, _/ ___ |/ /   #
 # /_____/___/_/   /_____/_/ |_/_/  |_/_/    #
-# 	 										#
+#                                           #
 #############################################
-# 	 										#
-#	DXP Notification Daemon for Linux 1.0	#
-#	martin.dominguez@liferay.com			#
-# 	 										#
-#	Version history:						#
-#	 06-02-2020 | 1.0 | Initial Commit		#
-# 	 										#
+#                                           #
+#	DXP Notification Daemon for Linux 1.0	    #
+#	martin.dominguez@liferay.com			        #
+#                                           #
+#	Version history:						              #
+#	 06-02-2020 | 1.0 | Initial Commit		    #
+#                                           #
 #############################################
-# 	 										#
+#                                           #
 # Requirements:                             #
 #   -> Requires curl 7.18.0 or newer        #
 #   -> Requieres jq                         #
 #   -> Requieres libnotify-bin              #
-# 	 										#
+#                                           #
 #############################################
 
 daemonName="dxp-notification-daemon"
@@ -46,7 +46,7 @@ SITE='20124'
 RESOURCE='blog-postings'
 AUTHDIGEST="bWFydGluLmRvbWluZ3VlekBsaWZlcmF5LmNvbTp0ZXN0Cg=="
 
-# Local variables - Keep your dirty hands out of them
+# Local variables - Keep your dirty hands off of them
 API="/o/headless-delivery/v1.0/sites/$SITE/$RESOURCE"
 FILTER_NEW='filter=dateCreated gt '
 FILTER_MOD='filter=dateModified gt '
